@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation(project(":order-service:order-domain:order-application-service"))
 }
 
 tasks.test {
