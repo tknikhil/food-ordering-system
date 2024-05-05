@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common:common-domain"))
 }
 
 tasks.test {
