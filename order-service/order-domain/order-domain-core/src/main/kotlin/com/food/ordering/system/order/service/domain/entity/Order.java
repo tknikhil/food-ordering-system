@@ -2,10 +2,13 @@ package com.food.ordering.system.order.service.domain.entity;
 
 import com.food.ordering.system.domain.entity.AggregateRoot;
 import com.food.ordering.system.domain.valueObject.*;
+import com.food.ordering.system.order.service.domain.exception.OrderDomainException;
+import com.food.ordering.system.order.service.domain.valueObject.OrderItemId;
 import com.food.ordering.system.order.service.domain.valueObject.StreetAddress;
 import com.food.ordering.system.order.service.domain.valueObject.TrackingId;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Order  extends AggregateRoot<OrderId> {
     private final CustomerId customerId;
@@ -43,6 +46,37 @@ public class Order  extends AggregateRoot<OrderId> {
     public List<String> getFaliureMessages() {return faliureMessages; }
 
 
+    private void initializeOrder(){
+        setId(new OrderId(UUID.randomUUID()));
+        trackingId = new TrackingId(UUID.randomUUID());
+        orderStatus = OrderStatus.PENDING;
+        initializeOrderItems();
+    }
+
+    private void initializeOrderItems() {
+        long itemId=1;
+        for (OrderItems orderItem:items) {
+            orderItem.initializeOrderItem(super.getId(), new OrderItemId(itemId++));
+        }
+    }
+
+    public void validateOrder(){
+        validateInitialOrder();
+        validateTotalPrice();
+//        validateItemsPrice();
+    }
+
+    private void validateInitialOrder() {
+        if(orderStatus != null|| getId() !=null){
+            throw  new OrderDomainException("Order is not in correct state for initialization!");
+        }
+    }
+
+    private void validateTotalPrice() {
+        if(price ==null || !price.isGreaterThanZero()){
+            throw  new OrderDomainException("Total price must be greater than Zero !");
+        }
+    }
     public static final class Builder {
         private OrderId orderId;
         private CustomerId customerId;
@@ -56,8 +90,6 @@ public class Order  extends AggregateRoot<OrderId> {
 
         private Builder() {
         }
-
-
 
         public Builder orderId(OrderId val) {
             orderId = val;

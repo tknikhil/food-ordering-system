@@ -40,6 +40,17 @@ public class OrderItems extends BaseEntity<OrderItemId> {
         return subTotal;
     }
 
+    public void initializeOrderItem() {
+
+    }
+
+
+
+    void initializeOrderItem(OrderId id, OrderItemId orderItemId) {
+        this.orderId=orderId;
+        super.setId(orderItemId);
+    }
+
     public static final class Builder {
         private OrderItemId orderItemId;
         private Product product;
