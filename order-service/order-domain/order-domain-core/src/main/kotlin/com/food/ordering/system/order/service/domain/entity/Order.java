@@ -18,7 +18,7 @@ public class Order  extends AggregateRoot<OrderId> {
     private final List<OrderItems> items;
     private TrackingId trackingId;
     private OrderStatus orderStatus;
-    private List<String> faliureMessages;
+    private List<String> failureMessages;
 
     private Order(Builder builder) {
        super.setId(builder.orderId);
@@ -29,7 +29,7 @@ public class Order  extends AggregateRoot<OrderId> {
         items = builder.items;
         trackingId = builder.trackingId;
         orderStatus = builder.orderStatus;
-        faliureMessages = builder.faliureMessages;
+        failureMessages = builder.failureMessages;
     }
     public static Builder builder() {
         return new Builder();
@@ -43,7 +43,7 @@ public class Order  extends AggregateRoot<OrderId> {
     public List<OrderItems> getItems() { return items;}
     public TrackingId getTrackingId() {return trackingId;}
     public OrderStatus getOrderStatus() { return orderStatus;}
-    public List<String> getFaliureMessages() {return faliureMessages; }
+    public List<String> getFaliureMessages() {return failureMessages; }
 
 
     private void initializeOrder(){
@@ -95,6 +95,45 @@ public class Order  extends AggregateRoot<OrderId> {
         }
     }
 
+    public void pay(){
+        if(orderStatus != OrderStatus.PENDING){
+            throw new OrderDomainException("Order is not in correct state for pay operation !");
+        }
+        orderStatus=OrderStatus.PAID;
+    }
+
+    public void approve(){
+        if(orderStatus !=OrderStatus.PAID){
+            throw  new OrderDomainException("Order is not in correct state for approve operation");
+        }
+        orderStatus=OrderStatus.APPROVED;
+    }
+
+    public void initCancel(List<String> failureMessages){
+        if(orderStatus !=OrderStatus.PAID){
+            throw new OrderDomainException("Order is not in correct state for initCancel Operation !");
+        }
+        orderStatus =OrderStatus.CANCELLING;
+        updateFailureMessages(failureMessages);
+    }
+
+    public void cancel(List<String> failureMessages){
+        if(!(orderStatus==OrderStatus.PENDING||orderStatus==OrderStatus.CANCELLING)){
+                throw  new OrderDomainException("Order is not in correct state for cancel operation !");
+        }
+        orderStatus =OrderStatus.CANCELLED;
+        updateFailureMessages(failureMessages);
+    }
+
+    private void updateFailureMessages(List<String> failureMessages) {
+        if(this.failureMessages!=null && failureMessages !=null){
+            this.failureMessages.addAll(failureMessages.stream().filter(message -> !message.isEmpty()).toList());
+        }
+        if(this.failureMessages == null){
+            this.failureMessages=failureMessages;
+        }
+    }
+
     public static final class Builder {
         private OrderId orderId;
         private CustomerId customerId;
@@ -104,7 +143,7 @@ public class Order  extends AggregateRoot<OrderId> {
         private List<OrderItems> items;
         private TrackingId trackingId;
         private OrderStatus orderStatus;
-        private List<String> faliureMessages;
+        private List<String> failureMessages;
 
         private Builder() {
         }
@@ -149,8 +188,8 @@ public class Order  extends AggregateRoot<OrderId> {
             return this;
         }
 
-        public Builder faliureMessages(List<String> val) {
-            faliureMessages = val;
+        public Builder failureMessages(List<String> val) {
+            failureMessages = val;
             return this;
         }
 
