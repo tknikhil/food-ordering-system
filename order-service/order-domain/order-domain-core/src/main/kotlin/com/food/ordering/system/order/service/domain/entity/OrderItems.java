@@ -94,4 +94,10 @@ public class OrderItems extends BaseEntity<OrderItemId> {
             return new OrderItems(this);
         }
     }
+
+    boolean isPriceValid() {
+        return price.isGreaterThanZero() &&
+                price.equals(product.getPrice()) &&
+                price.multiply(quantity).equals(subTotal);
+    }
 }

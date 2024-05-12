@@ -63,7 +63,24 @@ public class Order  extends AggregateRoot<OrderId> {
     public void validateOrder(){
         validateInitialOrder();
         validateTotalPrice();
-//        validateItemsPrice();
+        validateItemsPrice();
+    }
+
+    private void validateItemsPrice() {
+        Money orderItemsTotal = items.stream().map(orderItem ->{
+            validateItemPrice(orderItem);
+            return orderItem.getSubTotal();
+        }).reduce(Money.Zero,Money::add);
+
+        if(!price.equals(orderItemsTotal)){
+            throw new OrderDomainException("Total price :"+price.getAmount()+" is not equal to Order item Total "+orderItemsTotal.getAmount()+" !");
+        }
+    }
+
+    private void validateItemPrice(OrderItems orderItem) {
+        if(!orderItem.isPriceValid()){
+            throw new OrderDomainException("Order Item price "+orderItem.getPrice().getAmount()+" is  not valid for Product "+orderItem.getProduct().getId().getValue());
+        }
     }
 
     private void validateInitialOrder() {
@@ -77,6 +94,7 @@ public class Order  extends AggregateRoot<OrderId> {
             throw  new OrderDomainException("Total price must be greater than Zero !");
         }
     }
+
     public static final class Builder {
         private OrderId orderId;
         private CustomerId customerId;
