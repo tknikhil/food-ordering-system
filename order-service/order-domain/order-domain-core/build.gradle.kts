@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation(project(":common:common-domain"))
+    implementation("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.test {

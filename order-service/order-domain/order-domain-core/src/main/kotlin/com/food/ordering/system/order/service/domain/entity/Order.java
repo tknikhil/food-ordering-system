@@ -46,14 +46,14 @@ public class Order  extends AggregateRoot<OrderId> {
     public List<String> getFaliureMessages() {return failureMessages; }
 
 
-    private void initializeOrder(){
+    public void initializeOrder(){
         setId(new OrderId(UUID.randomUUID()));
         trackingId = new TrackingId(UUID.randomUUID());
         orderStatus = OrderStatus.PENDING;
         initializeOrderItems();
     }
 
-    private void initializeOrderItems() {
+    public void initializeOrderItems() {
         long itemId=1;
         for (OrderItems orderItem:items) {
             orderItem.initializeOrderItem(super.getId(), new OrderItemId(itemId++));

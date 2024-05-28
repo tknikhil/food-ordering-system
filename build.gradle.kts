@@ -13,6 +13,10 @@ repositories {
 }
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation("org.projectlombok:lombok:provided")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+
+
 }
 
 tasks.test {
