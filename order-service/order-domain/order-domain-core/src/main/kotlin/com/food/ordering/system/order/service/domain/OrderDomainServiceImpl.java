@@ -4,6 +4,9 @@ import com.food.ordering.system.order.service.domain.entity.Order;
 import com.food.ordering.system.order.service.domain.entity.Resturant;
 import com.food.ordering.system.order.service.domain.event.OrderCreatedEvent;
 import com.food.ordering.system.order.service.domain.event.OrderPaidEvent;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneId;
@@ -11,6 +14,8 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Slf4j
+@Log4j
+@Log
 public class OrderDomainServiceImpl implements  OrderDomainService{
 
 
@@ -22,6 +27,7 @@ public class OrderDomainServiceImpl implements  OrderDomainService{
         order.initializeOrder();
         String orderId=order.getId().getValue().toString();
 //        log.info("Order with id: {} is initiated",orderId);
+
         return new OrderCreatedEvent(order, ZonedDateTime.now(ZoneId.of("UTC")));
     }
 
