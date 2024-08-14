@@ -15,7 +15,8 @@ repositories {
     implementation(project(":common:common-domain"))
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework:spring-tx")
-}
+        implementation("org.projectlombok:lombok:1.18.30")
+    }
 kotlin {
     jvmToolchain(17)
 }
