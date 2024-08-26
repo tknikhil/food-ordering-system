@@ -16,7 +16,7 @@ public class CreateOrderCommand {
     @NotNull
     private final UUID customerId;
     @NotNull
-    private final UUID resturantId;
+    private final UUID restaurantId;
     @NotNull
     private final BigDecimal price;
     @NotNull
