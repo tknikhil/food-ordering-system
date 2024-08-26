@@ -1,23 +1,21 @@
 package com.food.ordering.system.order.service.domain.dto.create;
 
+import com.food.ordering.system.domain.valueObject.OrderStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.math.BigInteger;
 import java.util.UUID;
 
-@Getter
 @Builder
+@Getter
 @AllArgsConstructor
-public class OrderItem {
+public class CreateOrderResponse {
     @NotNull
-    private final UUID productId;
+    private final UUID orderTrackingId;
     @NotNull
-    private final Integer quantity;
+    private final OrderStatus orderStatus;
     @NotNull
-    private final BigInteger price;
-    @NotNull
-    private final BigInteger subTotal;
+    private final  String message;
 }

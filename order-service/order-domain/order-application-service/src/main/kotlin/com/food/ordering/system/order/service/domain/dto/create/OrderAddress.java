@@ -1,23 +1,23 @@
 package com.food.ordering.system.order.service.domain.dto.create;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.math.BigInteger;
-import java.util.UUID;
-
 @Getter
 @Builder
 @AllArgsConstructor
-public class OrderItem {
+public class OrderAddress {
     @NotNull
-    private final UUID productId;
+    @Max(value = 50)
+    private final String street;
     @NotNull
-    private final Integer quantity;
+    @Max(value=10)
+    private final String postalCode;
     @NotNull
-    private final BigInteger price;
-    @NotNull
-    private final BigInteger subTotal;
+    @Max(value = 50)
+    private final String city;
+
 }
