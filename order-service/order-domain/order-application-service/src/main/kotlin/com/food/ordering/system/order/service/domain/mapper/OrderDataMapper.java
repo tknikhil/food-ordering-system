@@ -40,12 +40,15 @@ public class OrderDataMapper {
     }
 
 
-//    need to work on OrderItems Builder class to solve this issue
+
     private List<OrderItems> orderItemsToOrderItemsEntities(List<OrderItem> orderItems) {
         return orderItems.stream()
                 .map(orderItem -> OrderItems.builder()
                         .product(new Product(new ProductId(orderItem.getProductId())))
-                        .build())
+                        .price(new Money(orderItem.getPrice()))
+                        .quantity(orderItem.getQuantity())
+                        .subTotal(new Money(orderItem.getSubTotal()))
+                        .build()).collect(Collectors.toList());
     }
 
     private StreetAddress orderAddressToStreetAddress(OrderAddress orderAddress) {
